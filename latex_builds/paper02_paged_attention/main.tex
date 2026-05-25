@@ -68,11 +68,35 @@ It must be explicitly noted that this concatenation modifies the underlying math
 \subsection{Preliminary Benchmark Estimates}
 To quantify the necessity of this kernel, we provide back-of-the-envelope estimates for a 13B parameter model operating at a 64k token context window:
 \begin{itemize}
-    \item \textbf{Naive Unfused Dual-Attention:} Requires materializing the full $N \times N$ attention matrix to HBM twice, transferring approximately 8GB of data per layer. At 40 layers, this incurs an estimated $O(\text{100+ ms})$ latency penalty per token, rendering the system unusable for interactive generation.
+    \item \textbf{Naive Unfused Dual-Attention:} Assuming a hidden dimension $d \approx 5120$ and standard FP16 precision (2 bytes per element), materializing the full $N \times N$ attention matrix ($64000 \times 64000$) requires $\approx 8$ GB of memory per layer. For a 40-layer model, this forces $\approx 320$ GB of intermediate HBM read/writes per token. On an NVIDIA A100 with $\approx 2$ TB/s of memory bandwidth, these transfers alone inject a mathematically unavoidable $O(\text{160 ms})$ latency penalty per token. This renders the system unusable for interactive generation, where target latencies are typically $<20$ ms per token.
     \item \textbf{PagedFieldprintAttention (Fused):} By maintaining intermediate softmax reductions in SRAM and relying on PagedAttention's block-level K/V caching, memory transfers are reduced by an order of magnitude, preserving the $O(N)$ memory complexity of FlashAttention and adding an estimated $<5\%$ overhead compared to standard inference.
 \end{itemize}
 
 \section{Conclusion}
-Theoretical mathematics and alignment philosophy mean nothing if they cannot physically run on silicon. By diagnosing the catastrophic failures of synchronous hashing and unfused attention equations, we have engineered the required hardware optimizations. Asynchronous Merkle Validation, deterministic INT8 quantization, and the PagedFieldprintAttention fused kernel provide the physical blueprints for deploying Verifiable Dual-Path Architectures at massive scale.
+Theoretical mathematics and alignment philosophy mean nothing if they cannot physically run on silicon. By diagnosing the catastrophic failures of synchronous hashing and unfused attention equations, we have specified the required hardware optimizations. Asynchronous Merkle Validation, deterministic INT8 quantization, and the PagedFieldprintAttention fused kernel provide the physical blueprints for deploying Verifiable Dual-Path Architectures at massive scale.
+
+\begin{thebibliography}{9}
+
+\bibitem{memorizing} 
+Wu, Y., Rabe, M. N., Hutchins, D., \& Szegedy, C. (2022). 
+\textit{Memorizing Transformers}. 
+International Conference on Learning Representations (ICLR).
+
+\bibitem{retro} 
+Borgeaud, S., Mensch, A., Hoffmann, J., Cai, T., Rutherford, E., Millican, K., ... \& Sifre, L. (2021). 
+\textit{Improving language models by retrieving from trillions of tokens}. 
+arXiv preprint arXiv:2112.04426.
+
+\bibitem{flashattention} 
+Dao, T., Fu, D., Ermon, S., Rudra, A., \& Ré, C. (2022). 
+\textit{FlashAttention: Fast and memory-efficient exact attention with IO-awareness}. 
+Advances in Neural Information Processing Systems (NeurIPS).
+
+\bibitem{pagedattention} 
+Kwon, W., Li, Z., Zhuang, S., Sheng, Y., Zheng, L., Yu, C. H., ... \& Stoica, I. (2023). 
+\textit{Efficient Memory Management for Large Language Model Serving with PagedAttention}. 
+Symposium on Operating Systems Principles (SOSP).
+
+\end{thebibliography}
 
 \end{document}
