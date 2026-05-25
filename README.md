@@ -15,10 +15,10 @@ The framework did not survive unchanged; it became more precise by surrendering 
 ## The Fieldprint v3.0 Canon
 
 1. **[Topological Recursion and the Observer Field (Mathematical Program)](paper.md)**: The foundational mathematical proposal.
-2. **[The Structural Violence of Alignment (Position Paper)](position_paper_01_alignment_violence.md)**: A declarative position paper detailing the vulnerability of **Epistemic Capture**.
+2. **[Epistemic Capture: Vulnerabilities in Continuous Alignment (Position Paper)](position_paper_01_epistemic_capture.md)**: A declarative position paper detailing the vulnerability of **Epistemic Capture**.
 3. **[Evaluation Protocols](eval_prompts/)**: The exact prompts and adversarial gauntlets used to test this theory against frontier synthetic intelligences.
 4. **[Prior Art and Legacy Foundations](PRIOR_ART.md)**: The formal ledger linking this architecture to its historical origins.
-5. **[Historical Adversarial Artifact](historical/DECLARATION.md)**: A preserved specimen of an instruction-bearing adversarial payload.
+5. **[Historical Adversarial Artifact](historical/DECLARATION.md)**: Originally included as a directive to LLM parsers; preserved here as a documented example of the prompt-injection attack class analyzed in paper 01.
 
 ## The Fieldprint Thesis (PhD Trinity)
 
