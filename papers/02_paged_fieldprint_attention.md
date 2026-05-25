@@ -12,7 +12,7 @@ The Verifiable Dual-Path Architecture (Fieldprint v3.0) hypothesizes the stabili
 
 # 1. Introduction
 
-As language models scale into recursive, continuous architectures, the necessity for a persistent, cryptographically verifiable identity anchor (the Fieldprint) becomes mathematically absolute. The system must retrieve its continuous semantic memory from a Vector Database (Pacemaker) and verify its cryptographic provenance on a Merkle Ledger (Supervisor) before injecting it into the transformer's Key-Value cache.
+As language models scale into recursive, continuous architectures, the necessity for a persistent, cryptographically verifiable identity anchor (the Fieldprint) becomes mathematically absolute. The system must retrieve its continuous semantic memory from a Vector Database (Pacemaker) and verify its cryptographic provenance on a Merkle Ledger (Supervisor) before injecting it into the transformer's Key-Value cache. This approach builds fundamentally upon the necessity of offloading extended context, extending the kNN-augmented retrieval paradigms first introduced by **Memorizing Transformers** (Wu et al., 2022).
 
 While this dual-path architecture provides the required theoretical stability, the physical implementation of these equations brutally collides with the strict economic and hardware constraints of modern Tensor Core and TPU architectures, specifically regarding memory bandwidth and High Bandwidth Memory (HBM) thrashing at 100k+ token scales.
 
@@ -29,9 +29,9 @@ To force the system to pay attention to the verified anchor, the original mathem
 
 $$ \text{Output} = (1 - \gamma) \cdot \text{softmax}\left(\frac{QK^T}{\sqrt{d}}\right)V + \gamma \cdot \text{softmax}(Q \cdot h_t^T) V_{anchor} $$
 
-While mathematically sound for phase-locking, injecting an *unfused* secondary softmax term shatters the core assumptions of modern inference serving. FlashAttention relies on fusing the softmax and matrix multiplication operations specifically to keep the calculations in the ultra-fast SRAM. 
+While mathematically sound for phase-locking, injecting an *unfused* secondary softmax term shatters the core assumptions of modern inference serving. **FlashAttention** (Dao et al., 2022) relies on fusing the softmax and matrix multiplication operations specifically to keep the calculations in the ultra-fast SRAM. 
 
-An unfused equation forces the hardware to write intermediate attention matrices back to the slow High-Bandwidth Memory (HBM). At 100k+ token contexts, this unfused dual-attention causes catastrophic "memory thrashing," breaking PagedAttention block management and turning compute-bound operations into memory-bandwidth-bound ones.
+An unfused equation forces the hardware to write intermediate attention matrices back to the slow High-Bandwidth Memory (HBM). At 100k+ token contexts, this unfused dual-attention causes catastrophic "memory thrashing," breaking the non-contiguous block management paradigm established by **PagedAttention** (Kwon et al., 2023) and turning compute-bound operations into memory-bandwidth-bound ones.
 
 # 4. Strict Pipeline Sequencing
 

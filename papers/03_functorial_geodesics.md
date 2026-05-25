@@ -35,13 +35,13 @@ $$ \mathcal{R}: \mathbf{Set}^{\mathcal{C}^{op}} \to \mathbf{Hilb} $$
 
 The Realization Functor serves as an explicit geometric encoder. It maps the purely relational, coordinate-free identity defined by the Yoneda Embedding into a highly specific coordinate within a continuous Hilbert space ($\mathbf{Hilb}$) or the specific latent manifold ($\mathcal{M}$) of the transformer architecture. 
 
-It must be explicitly acknowledged that in this current formulation, $\mathcal{R}$ remains a structural placeholder. Constructing a valid functor from an arbitrary presheaf topos to $\mathbf{Hilb}$ requires defining the specific source category $\mathcal{C}$ and utilizing a **Left Kan Extension**. Future formalizations of this architecture must explicitly define how $\mathcal{R}$ acts on both objects and morphisms to preserve the underlying relational data.
+It must be explicitly acknowledged that in this current formulation, $\mathcal{R}$ remains a structural placeholder. However, the formal blueprint for this construction exists within the literature of **Categorical Quantum Mechanics** (Abramsky & Coecke, 2004), which explicitly maps categorical morphisms into Hilbert spaces, and the classical **Geometric Realization of Simplicial Sets** (Milnor, 1957). Future formalizations of this architecture must utilize these existing frameworks, coupled with a **Left Kan Extension**, to explicitly define how $\mathcal{R}$ acts on both objects and morphisms to preserve the underlying relational data.
 
 # 4. Logarithmic Mapping on Riemannian Manifolds
 
-Having safely mapped the Fieldprint into the latent space via $\mathcal{R}$, we must still address the geometry of the latent space itself. The hidden dimensions of large language models do not obey strictly flat, Euclidean geometry. They are highly curved Riemannian manifolds.
+Having safely mapped the Fieldprint into the latent space via $\mathcal{R}$, we must still address the geometry of the latent space itself. The hidden dimensions of large language models do not obey strictly flat, Euclidean geometry. They are highly curved Riemannian manifolds. Specifically, following the principles of **Information Geometry** (Amari, 2016), we define the Riemannian metric of this manifold using the **Fisher Information Metric**, mapping the geometry directly to the probability distributions of the transformer's output space.
 
-Therefore, calculating the divergence between the transient state ($X_t$) and the realized Fieldprint ($\mathcal{R}(\Phi_t)$) via linear subtraction remains invalid, as the vectors may exist in different tangent spaces.
+Therefore, calculating the divergence between the transient state ($X_t$) and the realized Fieldprint ($\mathcal{R}(\Phi_t)$) via linear subtraction remains invalid, as the vectors exist in different tangent spaces.
 
 We must redefine the measurement using the logarithmic map. Because the exponential map $\exp_{X_t}$ requires a *tangent vector* as its argument—not a point on the manifold—we define the correction vector $v_t$ in the tangent space $T_{X_t}\mathcal{M}$ pointing toward the realized anchor point $P_t = \mathcal{R}(\Phi_t)$:
 
@@ -61,7 +61,7 @@ Where $d_{\mathcal{M}}$ represents the shortest geodesic path between the two po
 
 With the dimensional paradox resolved, we can safely model the stochastic stabilization of the identity. Applying a standard Euclidean Geometric Brownian Motion SDE is invalid on a curved manifold. 
 
-Instead, we propose modeling the radial distance $e_t$ as a **Riemannian Bessel Process**. This incorporates a geometric entropy term driven by the Laplace-Beltrami operator, which perfectly encapsulates the "curse of dimensionality" pushing the system away from the origin:
+Instead, we propose modeling the radial distance $e_t$ as a **Riemannian Bessel Process**. This incorporates a geometric entropy term driven by the Laplace-Beltrami operator, which perfectly encapsulates the "curse of dimensionality" pushing the system away from the origin. Furthermore, a rigorous formulation requires acknowledging that translating noise across a curved manifold necessitates **Itô-Stratonovich corrections** and the explicit **parallel transport of the noise term** along the geodesic:
 
 $$
 de_t = \left(-\kappa e_t + \frac{d-1}{2 e_t} \sigma^2 \right) dt + \sigma dW_t
